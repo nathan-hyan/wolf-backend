@@ -10,7 +10,6 @@ import '@configs/database';
 import Users from '@routes/Users';
 import Products from '@routes/Products';
 import Sells from '@routes/Sells';
-import Stores from '@routes/Stores';
 import { SESSION_CONFIG } from '@constants/main';
 
 console.clear();
@@ -29,7 +28,6 @@ app.use(
 app.use('/api/v1/users', Users);
 app.use('/api/v1/products', Products);
 app.use('/api/v1/sells', Sells);
-app.use('/api/v1/stores', Stores);
 
 app.listen(PORT, () => {
   console.log(`🦋 >> ${PORT}`);

@@ -1,5 +1,9 @@
 import { ObjectId, Document } from 'mongoose';
 
+interface Comments {
+  body: string;
+  timestamp: string;
+}
 export interface Product extends Document {
   name: string;
   price: number;
@@ -7,6 +11,5 @@ export interface Product extends Document {
   category: string;
   image: string;
   barcode: string;
-  storeBranch: string;
-  storeId: ObjectId;
+  comments: Comments[]
 }
