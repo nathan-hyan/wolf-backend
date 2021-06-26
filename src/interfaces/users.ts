@@ -1,10 +1,7 @@
-import { Document, ObjectId } from 'mongoose';
+import { Document } from 'mongoose';
 
 export default interface User extends Document {
   name: string;
-  DNI: number;
+  email: string;
   password: string;
-  type: 0 | 1 | 2;
-  storeId: ObjectId;
-  storeLocation: ObjectId;
 }
