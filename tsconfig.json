@@ -8,13 +8,13 @@
     "strict": true,
     "baseUrl": "src",
     "paths": {
-      "@constants/*": ["constants/*"],
-      "@controllers/*": ["controllers/*"],
-      "@models/*": ["models/*"],
-      "@routes/*": ["routes/*"],
-      "@interfaces/*": ["interfaces/*"],
-      "@helpers/*": ["helpers/*"],
-      "@configs/*": ["configs/*"]
+      "@constants/*": ["./constants/*"],
+      "@controllers/*": ["./controllers/*"],
+      "@models/*": ["./models/*"],
+      "@routes/*": ["./routes/*"],
+      "@interfaces/*": ["./interfaces/*"],
+      "@helpers/*": ["./helpers/*"],
+      "@configs/*": ["./configs/*"]
     },
     "esModuleInterop": true,
     "skipLibCheck": true,
