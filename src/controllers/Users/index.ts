@@ -84,10 +84,15 @@ const editUser = (req: Request, res: Response, next: NextFunction) => {
     });
 };
 
+const checkUser = (req: Request, res: Response, next: NextFunction) => {
+  res.send({ success: true });
+};
+
 export default {
   createUser,
   deleteUser,
   editUser,
   loginUser,
   logoutUser,
+  checkUser,
 };
