@@ -22,6 +22,7 @@ app.use(cors({ credentials: true, origin: FRONTEND_APP }));
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(handleError);
+app.set("trust proxy", 1);
 app.use(session(SESSION_CONFIG));
 
 app.use("/api/v1/users", Users);
