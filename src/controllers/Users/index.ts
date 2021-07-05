@@ -10,6 +10,8 @@ import { MESSAGES } from "./constants";
 declare module "express-session" {
   interface Session {
     isAuth: boolean;
+    username: string;
+    _id: string;
     storeId: ObjectId;
   }
 }
@@ -49,6 +51,9 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   return bcrypt.compare(password, userExist.password, (error, response) => {
     if (!error && response) {
       req.session.isAuth = true;
+      req.session.username = userExist.name;
+      req.session._id = userExist._id;
+
       return res
         .status(200)
         .json({ success: true, username: userExist.name, id: userExist._id });
@@ -85,7 +90,7 @@ const editUser = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const checkUser = (req: Request, res: Response, next: NextFunction) => {
-  res.send({ success: true });
+  res.send({ success: true, data: req.session });
 };
 
 export default {
