@@ -1,5 +1,5 @@
-import { Product } from '@interfaces/product';
-import { model, Schema } from 'mongoose';
+import { Product } from "@interfaces/product";
+import { model, Schema } from "mongoose";
 
 const Products: Schema = new Schema(
   {
@@ -7,12 +7,14 @@ const Products: Schema = new Schema(
     price: { type: Number, required: false, default: 0 },
     stock: { type: Number, required: false, default: 0 },
     category: [String],
-    image: { type: String, required: false },
-    comments: [{
-      body: String  
-    }]
+    image: [String],
+    comments: [
+      {
+        body: String,
+      },
+    ],
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-export default model<Product>('Products', Products);
+export default model<Product>("Products", Products);
