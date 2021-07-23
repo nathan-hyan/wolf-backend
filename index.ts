@@ -16,9 +16,9 @@ console.clear();
 
 const app = express();
 const PORT = config.server.port;
-const {FRONTEND_APP, TEST_ENV_APP} = process.env;
+const {BACKOFFICE, FRONTEND, TEST_ENV} = process.env;
 
-app.use(cors({ credentials: true, origin: [FRONTEND_APP!, TEST_ENV_APP!] }));
+app.use(cors({ credentials: true, origin: [FRONTEND!, BACKOFFICE!, TEST_ENV!] }));
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(handleError);
