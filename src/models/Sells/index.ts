@@ -10,9 +10,6 @@ const SellsSchema: Schema = new Schema(
       },
     ],
     amount: Number,
-    userId: { type: Schema.Types.ObjectId, ref: 'Users' },
-    storeId: { type: Schema.Types.ObjectId, ref: 'Stores' },
-    storeBranch: { type: String, required: true },
   },
   { timestamps: true },
 );

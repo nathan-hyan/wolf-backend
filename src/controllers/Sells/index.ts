@@ -17,31 +17,30 @@ interface CustomProductResponse {
   name: string;
 }
 
-async function checkForStock(cartProducts: CartProduct[]) {
+export async function checkForStock(cartProducts: CartProduct[]) {
   const ALL_PRODUCTS = await Products.find({}, 'name stock');
   const found: Product[] = [];
 
-  // eslint-disable-next-line array-callback-return
   cartProducts.map((cartItem: CartProduct): void => {
     const product = ALL_PRODUCTS.find(
       (item: CustomProductResponse) =>
-        item!._id!.toString() === cartItem.item.toString() && item.stock < cartItem.quantity,
+        item!._id!.toString() === cartItem.item.toString() && item.stock >= cartItem.quantity,
     )
     if(!!product) {found.push(product)};
 
     return;
   });
 
-  return !found.filter(Boolean).length;
+  return !!found.filter(Boolean).length;
 }
 
 async function subtractFromStock(productId: string, quantity: number) {
   const currentStock = await Products.findOne({ _id: productId }, 'stock');
 
+  if(currentStock){
   Products.findOneAndUpdate({ _id: productId }, { stock: currentStock!.stock - quantity }).then(() => {
-    console.log('ok!');
     return currentStock;
-  });
+  });} return false;
 }
 
 const createSell = async (req: Request, res: Response, next: NextFunction) => {
