@@ -2,6 +2,7 @@ import createError from "@helpers/createError";
 import { ErrorResponse } from "@interfaces/error";
 import Products from "@models/Products";
 import { NextFunction, Request, Response } from "express";
+import { updateRating } from "./utils";
 
 const getProducts = (req: Request, res: Response, next: NextFunction) => {
   Products.find({ storeId: req.session.storeId })
@@ -65,10 +66,30 @@ const deleteProduct = (req: Request, res: Response, next: NextFunction) => {
     });
 };
 
+const rateProduct = (req: Request, res: Response, next: NextFunction) => {
+  if (req.body.rating > 5 || req.body.rating < 0) {
+    return createError(next, res, "The score must be from 0 to 5", 400);
+  }
+
+  return Products.findOne({ _id: req.params.id }, "rating")
+    .then((response) => {
+      Products.findOneAndUpdate(
+        { _id: req.params.id },
+        { rating: updateRating(response!.rating, req.body.rating) }
+      )
+        .then((response) => {
+          res.send({ response, rating: req.body.rating });
+        })
+        .catch((err) => createError(next, res, err.message, err.status));
+    })
+    .catch((err) => createError(next, res, err.message, err.status));
+};
+
 export default {
   getProducts,
   getSingleProduct,
   createProduct,
   editProduct,
   deleteProduct,
+  rateProduct,
 };

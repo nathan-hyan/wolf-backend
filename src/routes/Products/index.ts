@@ -8,6 +8,7 @@ router.get('/get', Products.getProducts);
 router.get('/getSingle/:id', Products.getSingleProduct);
 router.post('/create', isAuth as never, Products.createProduct);
 router.put('/edit/:id', isAuth as never, Products.editProduct);
+router.put('/rate/:id', Products.rateProduct);
 router.delete('/delete/:id', isAuth as never, Products.deleteProduct);
 
 export = router;
