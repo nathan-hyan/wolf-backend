@@ -2,6 +2,7 @@ import createError from "@helpers/createError";
 import { ErrorResponse } from "@interfaces/error";
 import Products from "@models/Products";
 import { NextFunction, Request, Response } from "express";
+import { INITIAL_RATING } from "./constants";
 import { updateRating } from "./utils";
 
 const getProducts = (req: Request, res: Response, next: NextFunction) => {
@@ -75,7 +76,12 @@ const rateProduct = (req: Request, res: Response, next: NextFunction) => {
     .then((response) => {
       Products.findOneAndUpdate(
         { _id: req.params.id },
-        { rating: updateRating(response!.rating, req.body.rating) }
+        {
+          rating: updateRating(
+            response ? response.rating : INITIAL_RATING,
+            req.body.rating
+          ),
+        }
       )
         .then((response) => {
           res.send({ response, rating: req.body.rating });
@@ -85,6 +91,26 @@ const rateProduct = (req: Request, res: Response, next: NextFunction) => {
     .catch((err) => createError(next, res, err.message, err.status));
 };
 
+const commentOnProduct = (req: Request, res: Response, next: NextFunction) => {
+  return Products.findOne({ _id: req.params.id }, "comments").then(
+    (response) => {
+      const newComments = [
+        ...response!.comments,
+        { body: req.body.comment, timestamp: String(new Date()) },
+      ];
+
+      Products.findOneAndUpdate(
+        { _id: req.params.id },
+        { comments: newComments }
+      )
+        .then((response) => {
+          res.send({ success: true, response });
+        })
+        .catch((err) => createError(next, res, err.message, err.status));
+    }
+  );
+};
+
 export default {
   getProducts,
   getSingleProduct,
@@ -92,4 +118,5 @@ export default {
   editProduct,
   deleteProduct,
   rateProduct,
+  commentOnProduct,
 };
