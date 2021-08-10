@@ -5,9 +5,13 @@ interface Products {
   quantity: number;
 }
 
+interface UserInfo {
+  name: string;
+  whatsappNumber: number;
+}
+
 export interface Sells extends Document {
   products: Products[];
   amount: number;
-  userId: ObjectId;
-  storeId: ObjectId;
+  userInfo: UserInfo;
 }

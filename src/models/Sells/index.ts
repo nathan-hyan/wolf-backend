@@ -9,6 +9,10 @@ const SellsSchema: Schema = new Schema(
         quantity: Number,
       },
     ],
+    userInfo: {
+      name: {type: String, required: true},
+      whatsappNumber: {type: Number, required: true}
+    },
     amount: Number,
   },
   { timestamps: true },

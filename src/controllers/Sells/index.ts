@@ -11,7 +11,7 @@ interface CartProduct {
   quantity: number;
 }
 
-interface CustomProductResponse {
+export interface CustomProductResponse {
   _id?: string;
   stock: number;
   name: string;
@@ -31,7 +31,8 @@ export async function checkForStock(cartProducts: CartProduct[]) {
     return;
   });
 
-  return !!found.filter(Boolean).length;
+  console.log({ALL_PRODUCTS})
+  return !!found.filter(Boolean).length && found.filter(Boolean).length === cartProducts.length;
 }
 
 async function subtractFromStock(productId: string, quantity: number) {

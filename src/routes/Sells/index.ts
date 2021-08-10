@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/get', isAuth as never, Sells.getSellList);
 router.get('/getSingle/:id', isAuth as never, Sells.getSell);
-router.post('/create', isAuth as never, Sells.createSell);
+router.post('/create', Sells.createSell);
 router.put('/edit/:id', isAuth as never, Sells.editSell);
 router.delete('/delete/:id', isAuth as never, Sells.deleteSell);
 
