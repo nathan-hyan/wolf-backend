@@ -6,6 +6,7 @@ const Products: Schema = new Schema(
     name: { type: String, required: true },
     price: { type: Number, required: false, default: 0 },
     stock: { type: Number, required: false, default: 0 },
+    description: {type: String, required: false, default: ''},
     rating: {
       oneStar: { type: Number, required: false, default: 0 },
       twoStar: { type: Number, required: false, default: 0 },
