@@ -8,7 +8,7 @@
     "dev": "nodemon -r tsconfig-paths/register ./index.ts",
     "postinstall": "husky install",
     "build": "tsc",
-    "start": "node -r ts-node/register -r tsconfig-paths/register ./build/index.js",
+    "start": "cp lib-types/* node_modules/imgur && node -r ts-node/register -r tsconfig-paths/register ./build/index.js",
     "lint": "eslint --ext .js --ext .ts --ext .tsx"
   },
   "repository": {
