@@ -1,17 +1,22 @@
 import express, { Request, Response } from "express";
 import fs from 'fs';
 import imgur from 'imgur';
+import { ImgurResponse } from "./constants";
 const router = express.Router();
 
 router.post("/", async (req: Request, res: Response) => {
-  const file = req.file;
+  const files: string[] = []
+  fs.readdirSync('./public').map(item => files.push(`./public/${item}`));
 
   try {
-      const {link} = await imgur.uploadFile(`./public/${file?.filename}`);
-      res.send({success: true, link});
-      fs.unlinkSync(`./public/${file?.filename}`)
+    let links: string[] = []
+      const response = await imgur.uploadImages(files, 'File');
+      response.map((item: ImgurResponse) => links.push(item.link))
+      res.send({success: true, links});
+      files.map(file => fs.unlinkSync(file))
   } catch (err) {
       res.send({success: false, message: err.message})
+      files.map(file => fs.unlinkSync(file))
   }
 });
 

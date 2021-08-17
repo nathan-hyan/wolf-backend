@@ -21,7 +21,7 @@ const app = express();
 const PORT = config.server.port;
 const {BACKOFFICE, FRONTEND, TEST_ENV} = process.env;
 
-app.use(upload.single('image'))
+app.use(upload.any())
 app.use(cors({ credentials: true, origin: [FRONTEND!, BACKOFFICE!, TEST_ENV!] }));
 app.use(express.json());
 app.use(morgan("tiny"));
