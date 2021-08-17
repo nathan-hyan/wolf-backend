@@ -35,3 +35,5 @@ export const SESSION_CONFIG: SessionConfig = {
   },
   store,
 };
+
+export const ROUTE = '/api/v1'

@@ -14,9 +14,12 @@
       "@routes/*": ["./routes/*"],
       "@interfaces/*": ["./interfaces/*"],
       "@helpers/*": ["./helpers/*"],
-      "@configs/*": ["./configs/*"]
+      "@configs/*": ["./configs/*"],
     },
     "esModuleInterop": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./lib-types"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
