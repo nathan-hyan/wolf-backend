@@ -4,7 +4,7 @@ import imgur from 'imgur';
 const router = express.Router();
 
 router.post("/", async (req: Request, res: Response) => {
-  const file = (req as any).file;
+  const file = req.file;
 
   try {
       const {link} = await imgur.uploadFile(`./public/${file?.filename}`);
