@@ -7,7 +7,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ErrorResponse } from '@interfaces/error';
 
 interface CartProduct {
-  item: string;
+  id: string;
   quantity: number;
 }
 
@@ -24,14 +24,13 @@ export async function checkForStock(cartProducts: CartProduct[]) {
   cartProducts.map((cartItem: CartProduct): void => {
     const product = ALL_PRODUCTS.find(
       (item: CustomProductResponse) =>
-        item!._id!.toString() === cartItem.item.toString() && item.stock >= cartItem.quantity,
+        item!._id!.toString() === cartItem.id.toString() && item.stock >= cartItem.quantity
     )
     if(!!product) {found.push(product)};
 
     return;
   });
 
-  console.log({ALL_PRODUCTS})
   return !!found.filter(Boolean).length && found.filter(Boolean).length === cartProducts.length;
 }
 
@@ -46,7 +45,7 @@ async function subtractFromStock(productId: string, quantity: number) {
 
 const createSell = async (req: Request, res: Response, next: NextFunction) => {
   if (await checkForStock(req.body.products)) {
-    req.body.products.map((current: CartProduct) => subtractFromStock(current.item, current.quantity));
+    req.body.products.map((current: CartProduct) => subtractFromStock(current.id, current.quantity));
 
     new Sells(req.body)
       .save()

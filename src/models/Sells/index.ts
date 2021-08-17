@@ -7,13 +7,15 @@ const SellsSchema: Schema = new Schema(
       {
         item: { type: Schema.Types.ObjectId, ref: 'Products' },
         quantity: Number,
+        price: Number
       },
     ],
     userInfo: {
       name: {type: String, required: true},
-      whatsappNumber: {type: Number, required: true}
+      whatsApp: {type: Number, required: true}
     },
     amount: Number,
+    finished: {type: Boolean, required: false}
   },
   { timestamps: true },
 );

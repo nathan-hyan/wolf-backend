@@ -7,7 +7,6 @@ interface Error {
 }
 
 export default (error: Error, req: Request, res: Response, next: NextFunction) => {
-  console.log(next);
   res.status(error.status || 500);
   res.json({
     success: false,
