@@ -15,6 +15,8 @@ import { ROUTE, SESSION_CONFIG } from "@constants/main";
 import UploadImage from "@routes/UploadImage";
 import { upload } from "@configs/filesUploading";
 
+import '@helpers/whatsapp'
+
 console.clear();
 
 const app = express();
