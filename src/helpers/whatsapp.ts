@@ -20,22 +20,26 @@ client.on('authenticated', (session) => {
 client.on('qr', (qr) => {console.log('qr received', qr)})
 
 client.on('ready', () => {
-    console.log('Client is ready, baby')
+    console.log('💬 >> WhatsApp client initialized')
 })
 
 client.on('message', msg => {
     if (msg.body == '!ping') {
-        console.log('user wrote !ping')
+        console.log(`${msg.from} wrote !ping`)
         msg.reply('Changed this message because whatsapp will kill me if i continue responding *Hacete culeeeaaarrrrrr*');
     }
     if (msg.body == 'nathan') {
-        console.log('user wrote nathan')
+        console.log(`${msg.from} wrote nathan`)
         msg.reply('El mas pingudo');
     }
     if (msg.body == 'hola') {
-        console.log('user wrote hola')
+        console.log(`${msg.from} wrote hola`)
         msg.reply('Chupame la bola');
     }
 });
 
-client.initialize()
+export const sendMessage = (body: string) => {
+    client.sendMessage(`549${process.env.WHATSAPP_RECEIPT}@c.us`, body)
+}
+
+client.initialize();

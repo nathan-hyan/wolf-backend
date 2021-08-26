@@ -1,11 +1,12 @@
 import { model, Schema } from 'mongoose';
-import { Sells } from '@interfaces/sells';
+import { Purchase } from '@interfaces/sells';
 
 const SellsSchema: Schema = new Schema(
   {
     products: [
       {
         item: { type: Schema.Types.ObjectId, ref: 'Products' },
+        name: String,
         quantity: Number,
         price: Number
       },
@@ -20,4 +21,4 @@ const SellsSchema: Schema = new Schema(
   { timestamps: true },
 );
 
-export default model<Sells>('Sells', SellsSchema);
+export default model<Purchase>('Sells', SellsSchema);
