@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "cp lib-types/imgur/* node_modules/imgur && cp lib-types/whatsapp-web.js/* node_modules/whatsapp-web.js && nodemon -r tsconfig-paths/register ./index.ts --ignore 'session.json'",
+    "dev": "cp lib-types/imgur/* node_modules/imgur/ && cp lib-types/whatsapp-web.js/* node_modules/whatsapp-web.js/ && nodemon -r tsconfig-paths/register ./index.ts --ignore 'session.json'",
     "postinstall": "husky install",
     "build": "tsc",
-    "start": "cp lib-types/imgur/* node_modules/imgur && cp lib-types/whatsapp-web.js/* node_modules/whatsapp-web.js && node -r ts-node/register -r tsconfig-paths/register ./build/index.js",
+    "start": "cp lib-types/imgur/* node_modules/imgur/ && cp lib-types/whatsapp-web/* node_modules/whatsapp-web.js/src/util/ && node -r ts-node/register -r tsconfig-paths/register ./build/index.js",
     "lint": "eslint --ext .js --ext .ts --ext .tsx"
   },
   "repository": {
