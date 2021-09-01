@@ -59,4 +59,3 @@ app.use(`${ROUTE}/upload`, UploadImage)
 http.listen(PORT, () => {
   console.log(`🦋 >> ${PORT}`);
 });
-
