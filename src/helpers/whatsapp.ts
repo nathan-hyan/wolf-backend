@@ -13,9 +13,29 @@ try {
 } catch (err) {
   console.log(err.message, "// Creating a new session file...");
 }
-const client = new Client({
+let client = new Client({
   session,
 });
+
+const restartServer = () => {
+  console.log("❌ >> Attempting to delete the session file");
+  
+  try {
+    fs.unlinkSync(SESSION_FILE_PATH);
+    console.log("✅ >> Session file deleted!");
+  } catch ({ message }) {
+    console.log("❌ >> Error deleting session file >>", message);
+  }
+  
+  
+  console.log("💬 >> Shutting down WhatsApp Bot.");
+  client.destroy();
+  console.log("💬 >> Resetting params");
+  session=undefined;
+  rawSession='';
+  console.log("💬 >> Starting WhatsApp Bot with session", session)
+  client.initialize();
+}
 
 const socket = (io: Server): void => {
   io.on("connection", (socket: Socket) => {
@@ -29,6 +49,8 @@ const socket = (io: Server): void => {
 
     client.on("auth_failure", (msg) => {
       console.log("❌ >> WhatsApp client NOT initialized >>", msg);
+
+      restartServer();
     });
 
     client.on("qr", (qr) => {
@@ -37,7 +59,14 @@ const socket = (io: Server): void => {
     });
 
     client.on("ready", () => {
+      console.log("💬 >> Phone connected");
       console.log("💬 >> WhatsApp client initialized");
+      io.emit("isConnected", true);
+    });
+
+    client.on("disconnected", () => {
+      console.log("💬 >> Phone disconnected");
+      restartServer();
     });
 
     client.on("message", (msg) => {
