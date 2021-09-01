@@ -47,7 +47,7 @@ app.use(`${ROUTE}/upload`, UploadImage)
  const http = createServer(app);
  const io = new Server(http, {
    cors: {
-     credentials: false,
+     credentials: true,
      methods: ["GET", "PATCH", "POST", "PUT"],
      origin: true
    },
