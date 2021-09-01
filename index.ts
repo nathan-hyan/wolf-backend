@@ -16,6 +16,9 @@ import UploadImage from "@routes/UploadImage";
 import { upload } from "@configs/filesUploading";
 
 import '@helpers/whatsapp'
+import { createServer } from "http";
+import { Server } from "socket.io";
+import socket from "@helpers/whatsapp";
 
 console.clear();
 
@@ -31,11 +34,29 @@ app.use(handleError);
 app.set("trust proxy", 1);
 app.use(session(SESSION_CONFIG));
 
+
 app.use(`${ROUTE}/users`, Users);
 app.use(`${ROUTE}/products`, Products);
 app.use(`${ROUTE}/sells`, Sells);
 app.use(`${ROUTE}/upload`, UploadImage)
 
-app.listen(PORT, () => {
+/**
+ * Socket.IO Configuration
+ */
+
+ const http = createServer(app);
+ const io = new Server(http, {
+   cors: {
+     credentials: false,
+     methods: ["GET", "PATCH", "POST", "PUT"],
+     origin: true
+   },
+ });
+
+ socket(io);
+
+
+http.listen(PORT, () => {
   console.log(`🦋 >> ${PORT}`);
 });
+
