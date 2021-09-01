@@ -1,23 +1,34 @@
 import fs from 'fs';
-import {Client} from 'whatsapp-web.js';
+import {Client, ClientSession} from 'whatsapp-web.js';
 
 const SESSION_FILE_PATH = 'session.json';
 
-const rawSession = fs.readFileSync(SESSION_FILE_PATH);
+let rawSession = {}
+let session: ClientSession | undefined = undefined
 
+try{
+ rawSession = fs.readFileSync(SESSION_FILE_PATH);
+ session = JSON.parse(String(rawSession))
+} catch (err) {
+    console.log(err.message, '// Creating a new session file...')
+}
 const client = new Client({
-    session: JSON.parse(String(rawSession))
+    session
 });
 
 client.on('authenticated', (session) => {
     fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), (err) => {
         if (err) {
-            console.error(err);
+            console.log('❌ >> WhatsApp client NOT initialized >>', err.message);
         }
     });
 });
 
-client.on('qr', (qr) => {console.log('qr received', qr)})
+client.on('auth_failure', msg => {
+    console.log('❌ >> WhatsApp client NOT initialized >>', msg);
+});
+
+client.on('qr', (qr) => {console.log('🔑 >> QR Code:', qr)})
 
 client.on('ready', () => {
     console.log('💬 >> WhatsApp client initialized')
@@ -25,15 +36,15 @@ client.on('ready', () => {
 
 client.on('message', msg => {
     if (msg.body == '!ping') {
-        console.log(`${msg.from} wrote !ping`)
+        console.log(`💬 >> ${msg.from} wrote !ping`)
         msg.reply('Changed this message because whatsapp will kill me if i continue responding *Hacete culeeeaaarrrrrr*');
     }
     if (msg.body == 'nathan') {
-        console.log(`${msg.from} wrote nathan`)
+        console.log(`💬 >> ${msg.from} wrote nathan`)
         msg.reply('El mas pingudo');
     }
     if (msg.body == 'hola') {
-        console.log(`${msg.from} wrote hola`)
+        console.log(`💬 >> ${msg.from} wrote hola`)
         msg.reply('Chupame la bola');
     }
 });
