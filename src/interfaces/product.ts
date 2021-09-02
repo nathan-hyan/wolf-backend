@@ -1,6 +1,6 @@
-import { ObjectId, Document } from "mongoose";
+import { Document } from "mongoose";
 
-interface Comments {
+export interface Comment {
   body: string;
   timestamp: string;
 }
@@ -15,11 +15,24 @@ export interface Rating {
   total: number;
 }
 export interface Product extends Document {
+  price: number;
+  stock: number;
+  category?: string[];
+  _id?: string;
+  name: string;
+  image: string[];
+  comments: Comment[];
+  description?: string;
+  discount?: number;
+  rating: Rating;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CartItem {
+  id: string;
   name: string;
   price: number;
   stock: number;
-  category: string;
-  image: string;
-  rating: Rating;
-  comments: Comments[];
+  quantity: number;
 }

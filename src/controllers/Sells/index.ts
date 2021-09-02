@@ -5,6 +5,7 @@ import { Product } from '@interfaces/product';
 import Sells from '@models/Sells';
 import { NextFunction, Request, Response } from 'express';
 import { ErrorResponse } from '@interfaces/error';
+import { sendPurchaseMail } from '@helpers/mailHandler';
 
 interface CartProduct {
   id: string;
@@ -50,6 +51,7 @@ const createSell = async (req: Request, res: Response, next: NextFunction) => {
     new Sells(req.body)
       .save()
       .then((sellsCreationResponse) => {
+        sendPurchaseMail(req.body.userInfo.name, req.body.userInfo.whatsApp, req.body.products)
         res.send({
           success: true,
           data: sellsCreationResponse,
