@@ -13,6 +13,7 @@ try {
 } catch (err) {
   console.log(err.message, "// Creating a new session file...");
 }
+
 let client = new Client({
   session,
 });
@@ -91,7 +92,9 @@ const socket = (io: Server): void => {
 };
 
 client.initialize();
+
 export const sendMessage = (body: string) => {
   client.sendMessage(`549${process.env.WHATSAPP_RECEIPT}@c.us`, body);
 };
+
 export default socket;
