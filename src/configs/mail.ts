@@ -1,5 +1,5 @@
 export const TRANSPORT_CONFIG = {
-  host: "smtp.live.com",
+  host: "smtp-mail.outlook.com",
   port: 587,
   secure: false,
   tls: {
