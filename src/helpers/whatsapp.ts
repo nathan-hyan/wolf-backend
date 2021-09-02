@@ -3,19 +3,17 @@ import { Client, ClientSession } from "whatsapp-web.js";
 
 const SESSION_FILE_PATH = "session.json";
 
-let rawSession = {};
-let session: ClientSession | undefined = undefined;
+// let rawSession = {};
+// let session: ClientSession | undefined = undefined;
 
-try {
-  rawSession = fs.readFileSync(SESSION_FILE_PATH);
-  session = JSON.parse(String(rawSession));
-} catch (err) {
-  console.log(err.message, "// Creating a new session file...");
-}
+// try {
+//   rawSession = fs.readFileSync(SESSION_FILE_PATH);
+//   session = JSON.parse(String(rawSession));
+// } catch (err) {
+//   console.log(err.message, "// Creating a new session file...");
+// }
 
-let client = new Client({
-  session,
-});
+let client = new Client({});
 
 const restartServer = () => {
   console.log("❌ >> Attempting to delete the session file");
@@ -28,12 +26,8 @@ const restartServer = () => {
   }
   
   
-  console.log("💬 >> Shutting down WhatsApp Bot.");
+  console.log("💬 >> Restarting WhatsApp Bot.");
   client.destroy();
-  console.log("💬 >> Resetting params");
-  session=undefined;
-  rawSession='';
-  console.log("💬 >> Starting WhatsApp Bot with session", session)
   client.initialize();
 }
 
