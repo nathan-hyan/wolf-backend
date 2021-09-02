@@ -1,6 +1,5 @@
 import fs from "fs";
 import { Client, ClientSession } from "whatsapp-web.js";
-import { Server, Socket } from "socket.io";
 
 const SESSION_FILE_PATH = "session.json";
 
@@ -38,8 +37,6 @@ const restartServer = () => {
   client.initialize();
 }
 
-const socket = (io: Server): void => {
-  io.on("connection", (socket: Socket) => {
     client.on("authenticated", (session) => {
       fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), (err) => {
         if (err) {
@@ -56,13 +53,11 @@ const socket = (io: Server): void => {
 
     client.on("qr", (qr) => {
       console.log("🔑 >> QR Code emmited");
-      io.emit("wspQR", qr);
     });
 
     client.on("ready", () => {
       console.log("💬 >> Phone connected");
       console.log("💬 >> WhatsApp client initialized");
-      io.emit("isConnected", true);
     });
 
     client.on("disconnected", () => {
@@ -87,14 +82,8 @@ const socket = (io: Server): void => {
       }
     });
 
-    console.log(`👨🏻‍💻 >> User connected`);
-  });
-};
-
 client.initialize();
 
 export const sendMessage = (body: string) => {
   client.sendMessage(`549${process.env.WHATSAPP_RECEIPT}@c.us`, body);
 };
-
-export default socket;

@@ -18,7 +18,7 @@ import { upload } from "@configs/filesUploading";
 import '@helpers/whatsapp'
 import { createServer } from "http";
 import { Server } from "socket.io";
-import socket from "@helpers/whatsapp";
+import socket from "@helpers/socketIo";
 
 console.clear();
 
@@ -57,4 +57,4 @@ http.listen(PORT, () => {
   console.log(`🦋 >> ${PORT}`);
 });
 
-// socket(io);
+socket(io);
