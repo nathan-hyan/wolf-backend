@@ -51,7 +51,7 @@ const createSell = async (req: Request, res: Response, next: NextFunction) => {
     new Sells(req.body)
       .save()
       .then((sellsCreationResponse) => {
-        sendPurchaseMail(req.body.userInfo.name, req.body.userInfo.whatsApp, req.body.products).catch(err => console.log(err.message))
+        sendPurchaseMail(req.body.userInfo.name, req.body.userInfo.whatsApp, req.body.products).catch(err => console.log("📧 >> Mail error! //", err.message))
         res.send({
           success: true,
           data: sellsCreationResponse,

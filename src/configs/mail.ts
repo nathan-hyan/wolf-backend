@@ -2,6 +2,9 @@ export const TRANSPORT_CONFIG = {
   host: "smtp.live.com",
   port: 587,
   secure: false,
+  tls: {
+    ciphers: "SSLv3",
+  },
   auth: {
     user: process.env.MAIL_SENDER,
     pass: process.env.MAIL_SENDER_PASSWORD,
