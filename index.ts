@@ -23,8 +23,7 @@ import socket from "@helpers/whatsapp";
 console.clear();
 
 const app = express();
-const PORT = config.server.port;
-const {BACKOFFICE, FRONTEND, TEST_ENV} = process.env;
+const {BACKOFFICE, FRONTEND, TEST_ENV, PORT} = process.env;
 
 app.use(upload.any())
 app.use(cors({ credentials: true, origin: [FRONTEND!, BACKOFFICE!, TEST_ENV!] }));
@@ -49,13 +48,12 @@ app.use(`${ROUTE}/upload`, UploadImage)
   cors: {
     credentials: true,
     methods: ["GET", "PATCH", "POST", "PUT"],
-    origin: true
-  },
+    origin: [FRONTEND!, BACKOFFICE!, TEST_ENV!]
+    },
 });
-
- socket(io);
-
 
 http.listen(PORT, () => {
   console.log(`🦋 >> ${PORT}`);
 });
+
+socket(io);
