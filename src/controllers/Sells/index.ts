@@ -5,18 +5,26 @@ import { Product } from '@interfaces/product';
 import Sells from '@models/Sells';
 import { NextFunction, Request, Response } from 'express';
 import { ErrorResponse } from '@interfaces/error';
-import { sendMessage } from '@helpers/whatsapp';
-import { buildWhatsAppMessage } from './utils';
-import { CartItem } from '@interfaces/sells';
 
-export async function checkForStock(cartProducts: CartItem[]) {
+interface CartProduct {
+  id: string;
+  quantity: number;
+}
+
+export interface CustomProductResponse {
+  _id?: string;
+  stock: number;
+  name: string;
+}
+
+export async function checkForStock(cartProducts: CartProduct[]) {
   const ALL_PRODUCTS = await Products.find({}, 'name stock');
   const found: Product[] = [];
 
-  cartProducts.map((cartItem: CartItem): void => {
+  cartProducts.map((cartItem: CartProduct): void => {
     const product = ALL_PRODUCTS.find(
-      (item: Product) =>
-        String(item!._id!) === String(cartItem.id) && item.stock >= cartItem.quantity
+      (item: CustomProductResponse) =>
+        item!._id!.toString() === cartItem.id.toString() && item.stock >= cartItem.quantity
     )
     if(!!product) {found.push(product)};
 
@@ -37,18 +45,15 @@ async function subtractFromStock(productId: string, quantity: number) {
 
 const createSell = async (req: Request, res: Response, next: NextFunction) => {
   if (await checkForStock(req.body.products)) {
-    req.body.products.map((current: CartItem) => subtractFromStock(current.id, current.quantity));
+    req.body.products.map((current: CartProduct) => subtractFromStock(current.id, current.quantity));
 
     new Sells(req.body)
       .save()
-      .then(async (sellsCreationResponse) => {
-        const message = await buildWhatsAppMessage(sellsCreationResponse)
-        sendMessage(message)
+      .then((sellsCreationResponse) => {
         res.send({
           success: true,
           data: sellsCreationResponse,
         });
-
       })
       .catch((err) => createError(next, res, err.message, err.status));
   } else {

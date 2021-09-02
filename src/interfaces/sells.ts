@@ -1,20 +1,17 @@
 import { ObjectId, Document } from 'mongoose';
 
-export interface CartItem{
-  id: string;
-  name: string;
-  price: number;
-  stock: number;
+interface Products {
+  item: ObjectId;
   quantity: number;
 }
 
-export interface Info {
+interface UserInfo {
   name: string;
-  whatsApp: number;
+  whatsappNumber: number;
 }
-export interface Purchase extends Document {
-  products: CartItem[];
-  userInfo: Info;
+
+export interface Sells extends Document {
+  products: Products[];
   amount: number;
-  finished: boolean;
+  userInfo: UserInfo;
 }

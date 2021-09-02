@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "cp lib-types/imgur/* node_modules/imgur/ && cp lib-types/whatsapp-web.js/* node_modules/whatsapp-web.js/ && nodemon -r tsconfig-paths/register ./index.ts --ignore 'session.json'",
+    "dev": "nodemon -r tsconfig-paths/register ./index.ts",
     "postinstall": "husky install",
     "build": "tsc",
-    "start": "cp lib-types/imgur/* node_modules/imgur/ && cp lib-types/whatsapp-web.js/* node_modules/whatsapp-web.js/src/util/ && node -r ts-node/register -r tsconfig-paths/register ./build/index.js",
+    "start": "cp lib-types/* node_modules/imgur && node -r ts-node/register -r tsconfig-paths/register ./build/index.js",
     "lint": "eslint --ext .js --ext .ts --ext .tsx"
   },
   "repository": {
@@ -35,6 +35,7 @@
     "typescript": "4.3.5"
   },
   "dependencies": {
+    "@types/multer": "^1.4.7",
     "@types/bcryptjs": "^2.4.2",
     "@types/connect-mongodb-session": "^2.4.0",
     "@types/cors": "^2.8.10",
@@ -43,7 +44,6 @@
     "@types/jest": "^26.0.23",
     "@types/mongoose": "^5.11.96",
     "@types/morgan": "^1.9.2",
-    "@types/multer": "^1.4.7",
     "@types/node": "^15.12.4",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
@@ -58,10 +58,8 @@
     "mongoose": "^5.12.14",
     "morgan": "^1.10.0",
     "multer": "^1.4.3",
-    "socket.io": "^4.2.0",
     "ts-node": "^10.0.0",
-    "tsconfig-paths": "^3.9.0",
-    "whatsapp-web.js": "^1.14.0"
+    "tsconfig-paths": "^3.9.0"
   },
   "engines": {
     "node": "15.x",

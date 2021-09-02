@@ -18,9 +18,6 @@ const getProducts = (req: Request, res: Response, next: NextFunction) => {
 const getSingleProduct = (req: Request, res: Response, next: NextFunction) => {
   Products.findOne({ storeId: req.session.storeId, _id: req.params.id })
     .then((response) => {
-      response!.comments.sort((a, b) =>
-        new Date(b.timestamp) > new Date(a.timestamp) ? 1 : -1
-      );
       res.send({ success: true, response });
     })
     .catch((err: ErrorResponse) => {

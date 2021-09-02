@@ -5,6 +5,7 @@ import session from "express-session";
 
 import config from "@configs/server";
 import handleError from "@helpers/handleError";
+import "@configs/database";
 
 import Users from "@routes/Users";
 import Products from "@routes/Products";
@@ -13,11 +14,6 @@ import { ROUTE, SESSION_CONFIG } from "@constants/main";
 
 import UploadImage from "@routes/UploadImage";
 import { upload } from "@configs/filesUploading";
-
-import '@helpers/whatsapp'
-import { createServer } from "http";
-import { Server } from "socket.io";
-import socket from "@helpers/socketIo";
 
 console.clear();
 
@@ -33,28 +29,11 @@ app.use(handleError);
 app.set("trust proxy", 1);
 app.use(session(SESSION_CONFIG));
 
-
 app.use(`${ROUTE}/users`, Users);
 app.use(`${ROUTE}/products`, Products);
 app.use(`${ROUTE}/sells`, Sells);
 app.use(`${ROUTE}/upload`, UploadImage)
 
-/**
- * Socket.IO Configuration
- */
-
- const http = createServer(app);
- const io = new Server(http, {
-  cors: {
-    credentials: true,
-    methods: ["GET", "PATCH", "POST", "PUT"],
-    origin: [FRONTEND!, BACKOFFICE!, TEST_ENV!]
-    },
-});
-
-http.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`🦋 >> ${PORT}`);
 });
-
-import "@configs/database";
-socket(io);
