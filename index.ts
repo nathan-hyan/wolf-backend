@@ -5,7 +5,6 @@ import session from "express-session";
 
 import config from "@configs/server";
 import handleError from "@helpers/handleError";
-import "@configs/database";
 
 import Users from "@routes/Users";
 import Products from "@routes/Products";
@@ -57,4 +56,5 @@ http.listen(PORT, () => {
   console.log(`🦋 >> ${PORT}`);
 });
 
+import "@configs/database";
 socket(io);
