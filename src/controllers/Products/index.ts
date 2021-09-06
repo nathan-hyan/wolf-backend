@@ -95,8 +95,8 @@ const commentOnProduct = (req: Request, res: Response, next: NextFunction) => {
   return Products.findOne({ _id: req.params.id }, "comments").then(
     (response) => {
       const newComments = [
-        ...response!.comments,
         { body: req.body.comment, timestamp: String(new Date()) },
+        ...response!.comments,
       ];
 
       Products.findOneAndUpdate(
