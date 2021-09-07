@@ -14,4 +14,5 @@ export interface Sells extends Document {
   products: Products[];
   amount: number;
   userInfo: UserInfo;
+  finished: boolean;
 }
