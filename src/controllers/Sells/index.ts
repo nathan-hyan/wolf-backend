@@ -19,34 +19,47 @@ export interface CustomProductResponse {
 }
 
 export async function checkForStock(cartProducts: CartProduct[]) {
-  const ALL_PRODUCTS = await Products.find({}, 'name stock');
+  const ALL_PRODUCTS = await Products.find({}, "name stock");
   const found: Product[] = [];
 
   cartProducts.map((cartItem: CartProduct): void => {
     const product = ALL_PRODUCTS.find(
       (item: CustomProductResponse) =>
-        item!._id!.toString() === cartItem.id.toString() && item.stock >= cartItem.quantity
-    )
-    if(!!product) {found.push(product)};
+        item!._id!.toString() === cartItem.id.toString() &&
+        item.stock >= cartItem.quantity
+    );
+    if (!!product) {
+      found.push(product);
+    }
 
     return;
   });
 
-  return !!found.filter(Boolean).length && found.filter(Boolean).length === cartProducts.length;
+  return (
+    !!found.filter(Boolean).length &&
+    found.filter(Boolean).length === cartProducts.length
+  );
 }
 
 async function subtractFromStock(productId: string, quantity: number) {
-  const currentStock = await Products.findOne({ _id: productId }, 'stock');
+  const currentStock = await Products.findOne({ _id: productId }, "stock");
 
-  if(currentStock){
-  Products.findOneAndUpdate({ _id: productId }, { stock: currentStock!.stock - quantity }).then(() => {
-    return currentStock;
-  });} return false;
+  if (currentStock) {
+    Products.findOneAndUpdate(
+      { _id: productId },
+      { stock: currentStock!.stock - quantity }
+    ).then(() => {
+      return currentStock;
+    });
+  }
+  return false;
 }
 
 const createSell = async (req: Request, res: Response, next: NextFunction) => {
   if (await checkForStock(req.body.products)) {
-    req.body.products.map((current: CartProduct) => subtractFromStock(current.id, current.quantity));
+    req.body.products.map((current: CartProduct) =>
+      subtractFromStock(current.id, current.quantity)
+    );
 
     new Sells(req.body)
       .save()
@@ -59,7 +72,7 @@ const createSell = async (req: Request, res: Response, next: NextFunction) => {
       })
       .catch((err) => createError(next, res, err.message, err.status));
   } else {
-    createError(next, res, 'Not enough stock', 400);
+    createError(next, res, "Not enough stock", 400);
   }
 };
 
@@ -68,7 +81,9 @@ const getSell = (req: Request, res: Response, next: NextFunction) => {
     .then((response) => {
       res.send({ success: true, data: response });
     })
-    .catch((err: ErrorResponse) => createError(next, res, err.message, err.status));
+    .catch((err: ErrorResponse) =>
+      createError(next, res, err.message, err.status)
+    );
 };
 
 const getSellList = (req: Request, res: Response, next: NextFunction) => {
@@ -76,7 +91,9 @@ const getSellList = (req: Request, res: Response, next: NextFunction) => {
     .then((response) => {
       res.send({ success: true, data: response });
     })
-    .catch((err: ErrorResponse) => createError(next, res, err.message, err.status));
+    .catch((err: ErrorResponse) =>
+      createError(next, res, err.message, err.status)
+    );
 };
 
 const editSell = (req: Request, res: Response, next: NextFunction) => {
@@ -84,7 +101,9 @@ const editSell = (req: Request, res: Response, next: NextFunction) => {
     .then((response) => {
       res.send({ success: true, data: response });
     })
-    .catch((err: ErrorResponse) => createError(next, res, err.message, err.status));
+    .catch((err: ErrorResponse) =>
+      createError(next, res, err.message, err.status)
+    );
 };
 
 const deleteSell = (req: Request, res: Response, next: NextFunction) => {
@@ -92,7 +111,26 @@ const deleteSell = (req: Request, res: Response, next: NextFunction) => {
     .then((response) => {
       res.send({ success: true, data: response });
     })
-    .catch((err: ErrorResponse) => createError(next, res, err.message, err.status));
+    .catch((err: ErrorResponse) =>
+      createError(next, res, err.message, err.status)
+    );
+};
+
+const toggleFinished = (req: Request, res: Response, next: NextFunction) => {
+  Sells.findOne({ _id: req.params.id })
+    .then((response) => {
+      Sells.findOneAndUpdate(
+        { _id: req.params.id },
+        { finished: !response?.finished }
+      )
+        .then((response) => res.send({ success: true, response }))
+        .catch((err: ErrorResponse) =>
+          createError(next, res, err.message, err.status)
+        );
+    })
+    .catch((err: ErrorResponse) =>
+      createError(next, res, err.message, err.status)
+    );
 };
 
 export default {
@@ -101,4 +139,5 @@ export default {
   getSellList,
   editSell,
   deleteSell,
+  toggleFinished,
 };

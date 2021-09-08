@@ -4,10 +4,11 @@ import isAuth from 'middlewares/isAuth';
 
 const router = express.Router();
 
-router.get('/get', isAuth as never, Sells.getSellList);
-router.get('/getSingle/:id', isAuth as never, Sells.getSell);
+router.get('/get', isAuth, Sells.getSellList);
+router.get('/getSingle/:id', isAuth, Sells.getSell);
 router.post('/create', Sells.createSell);
-router.put('/edit/:id', isAuth as never, Sells.editSell);
-router.delete('/delete/:id', isAuth as never, Sells.deleteSell);
+router.put('/edit/:id', isAuth, Sells.editSell);
+router.put('/toggleFinished/:id', isAuth, Sells.toggleFinished)
+router.delete('/delete/:id', isAuth, Sells.deleteSell);
 
 export = router;
