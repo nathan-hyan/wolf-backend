@@ -1,22 +1,153 @@
-# Project [Hy-An TRK]
+# Wolf - Arte en cuero v1.0
+Backend App made with 💖 by [Hy-An](https://github.com/nathan-hyan)
 
-Open-source project for small business. Keeping track of sales, cash register, users and inventory stock.
+## Introduction
 
-## Installation
+This is a marketplace app for a small leather company based in Tucumán, Argentina.
 
- 1. Type `npm install`
- 2. Add `.env` file
- 3. Add `PORT` variable to `.env` file
+Made with Node.js, Express & MongoDB + Mongoose
+This Readme is courtesy of [StackEdit](https://stackedit.io/).
 
-## Running
+*First commit: june 22, 2021*
 
-To run locally, type `npm run dev` and it will open an instance with nodemon.
+## Libraries used:
 
-## Testing things to consider
+|Library|Link|
+|--|--|
+|bcryptjs|https://www.npmjs.com/package/bcryptjs|
+|connect-mongodb-session|https://github.com/mongodb-js/connect-mongodb-session|
+|dotenv|https://github.com/motdotla/dotenv|
+|express|https://expressjs.com/es/|
+|express-session|https://github.com/expressjs/session|
+|imgur|https://github.com/kaimallea/node-imgur|
+|mongoose|https://mongoosejs.com/|
+|morgan|https://github.com/expressjs/morgan|
+|multer|https://github.com/expressjs/multer|
 
-Currently it's necesary to do some testing with the sells section of the App... So downbelow is a list of all the ObjectIds necessary for testing.
+## Routes
 
- 1. 604e7d97a91fe31af66e4de7
- 2. 604e7da5a91fe31af66e4de8
- 3. 604e7db0a91fe31af66e4de9
- 4. 604e7db6a91fe31af66e4dea
+    BASELINE_URL = /api/v1
+---
+
+ - `{BASELINE_URL}/users`
+ - `{BASELINE_URL}/products`
+ - `{BASELINE_URL}/sells`
+ - `{BASELINE_URL}/upload`
+
+USERS Path
+---
+This is not meant to be exposed to the front-end, but to be used with the backoffice side of the app. 
+
+- POST - `/create` 
+	 - `{
+	"name": string,
+	"email": string,
+	"password": string
+}`
+- POST - `/auth/login` 
+	 - `{
+	"email": string,
+	"password": string
+}`
+- POST - `/auth/logout`
+	 - no body required
+
+-	GET - `/auth/check`
+-	PUT - `/edit/:id`
+	-	`{
+	"name": string,
+	"email": string,
+	"password": string
+}`
+- DELETE - `/delete/:id`
+
+PRODUCTS Path
+---
+Some parts of this endpoint has to be admin restricted, and can only be accessed by the backoffice app.
+
+-	GET - `/get`
+-	GET - `/getSingle/:id`
+-	POST - `/create`
+	-	`{
+	"price": number,
+	"stock": number,
+	"category": string[],
+	"image": string[],
+	"name": string,
+	"description": string
+}`
+-	PUT - `/edit/:id`
+	-	`{
+	"price": number,
+	"stock": number,
+	"category": string[],
+	"image": string[],
+	"name": string,
+	"description": string
+}`
+-	PUT - `/rate/:id`
+	-	`{ "rating": number }`
+-	PUT - `/comment/:id`
+	-	`{ "comment": string }`
+-	PUT - `/toggleFinished/:id`
+	-	no body
+-	DELETE - `/delete/:id`
+	
+SALES Path
+---
+Only accessible via the backoffice app, except for /create.
+
+-	GET - `/get`
+-	GET - `/getSingle/:id`
+-	POST - `/create`
+	-	`{
+	"products": [
+		{
+			"id": ProductID,
+			"name": string,
+			"price": number,
+			"stock": number,
+			"quantity": number
+		}],
+	"userInfo": {
+		"name": string,
+		"whatsApp": string
+	},
+	"amount": number
+}`
+-	PUT - `/edit/:id`
+	-	`{
+	"products": [
+		{
+			"id": ProductID,
+			"name": string,
+			"price": number,
+			"stock": number,
+			"quantity": number
+		}],
+	"userInfo": {
+		"name": string,
+		"whatsApp": string
+	},
+	"amount": number
+}`
+-	DELETE - `/delete/:id`
+
+UPLOAD Path
+---
+
+- POST - `/`
+	- FormData
+
+## Requirements
+This project uses enviroment variables in order to connect to the database. You can add the following line to an .env file in order to make this connection
+
+    DB_URI=Your MongoDB URI
+    KEY=Your MongoDB Key
+    IMGUR_CLIENT_API_KEY=Imgur client API
+    BACKOFFICE=Backoffice URL
+    FRONTEND=Frontend URL
+    TEST_ENV=Localhost env
+    MAIL_RECEIVER=Mail address to send the mails
+    MAIL_SENDER=Where the mails are sended from
+    MAIL_SENDER_PASSWORD=Password for the before mentioned account
