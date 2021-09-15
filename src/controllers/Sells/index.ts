@@ -1,11 +1,12 @@
 /* eslint-disable no-underscore-dangle */
-import createError from '@helpers/createError';
-import Products from '@models/Products';
-import { Product } from '@interfaces/product';
-import Sells from '@models/Sells';
-import { NextFunction, Request, Response } from 'express';
-import { ErrorResponse } from '@interfaces/error';
-import { sendPurchaseMail } from '@helpers/mailHandler';
+import createError from "@helpers/createError";
+import Products from "@models/Products";
+import { Product } from "@interfaces/product";
+import Sells from "@models/Sells";
+import { NextFunction, Request, Response } from "express";
+import { ErrorResponse } from "@interfaces/error";
+import { sendPurchaseMail } from "@helpers/mailHandler";
+import { HTTP_CODES } from "@constants/responseCodes";
 
 interface CartProduct {
   id: string;
@@ -64,7 +65,11 @@ const createSell = async (req: Request, res: Response, next: NextFunction) => {
     new Sells(req.body)
       .save()
       .then((sellsCreationResponse) => {
-        sendPurchaseMail(req.body.userInfo.name, req.body.userInfo.whatsApp, req.body.products).catch(err => console.log("📧 >> Mail error! //", err.message))
+        sendPurchaseMail(
+          req.body.userInfo.name,
+          req.body.userInfo.whatsApp,
+          req.body.products
+        ).catch((err) => console.log("📧 >> Mail error! //", err.message));
         res.send({
           success: true,
           data: sellsCreationResponse,
@@ -72,7 +77,7 @@ const createSell = async (req: Request, res: Response, next: NextFunction) => {
       })
       .catch((err) => createError(next, res, err.message, err.status));
   } else {
-    createError(next, res, "Not enough stock", 400);
+    createError(next, res, "No hay stock suficiente", HTTP_CODES.BAD_REQUEST.code);
   }
 };
 

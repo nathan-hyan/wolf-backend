@@ -1,6 +1,7 @@
 import { Document } from "mongoose";
 
 export interface Comment {
+  _id?: string;
   body: string;
   timestamp: string;
 }
