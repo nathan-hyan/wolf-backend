@@ -38,18 +38,18 @@ USERS Path
 ---
 This is not meant to be exposed to the front-end, but to be used with the backoffice side of the app. 
 
-- POST - `/create` 
+ - POST - `/create` 
 	 - `{
 	"name": string,
 	"email": string,
 	"password": string
 }`
-- POST - `/auth/login` 
+ - POST - `/auth/login` 
 	 - `{
 	"email": string,
 	"password": string
 }`
-- POST - `/auth/logout`
+ - POST - `/auth/logout`
 	 - no body required
 
 -	GET - `/auth/check`
@@ -87,10 +87,11 @@ Some parts of this endpoint has to be admin restricted, and can only be accessed
 }`
 -	PUT - `/rate/:id`
 	-	`{ "rating": number }`
--	PUT - `/comment/:id`
+-	PUT - `/comment/add/:id`
 	-	`{ "comment": string }`
 -	PUT - `/toggleFinished/:id`
 	-	no body
+- DELETE - `/comment/delete/:id/:comment_id`
 -	DELETE - `/delete/:id`
 	
 SALES Path
