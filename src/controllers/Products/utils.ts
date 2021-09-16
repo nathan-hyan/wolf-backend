@@ -1,4 +1,4 @@
-import { Rating } from "@interfaces/product";
+import { Rating, Comment } from "@interfaces/product";
 
 export const updateRating = (rating: Rating, newRating: number) => {
   switch (newRating) {
@@ -40,3 +40,30 @@ export const updateRating = (rating: Rating, newRating: number) => {
 
   return { ...rating, total: newTotalRating };
 };
+
+export const deleteComment = (comments: Comment[], idToDelete: string) => {
+
+  const PRODUCT_EXIST = comments.filter(
+    ({ _id }) => String(_id) === idToDelete
+  );
+
+  if(PRODUCT_EXIST.length > 0){
+    let response = comments.filter(
+      ({ _id }) => String(_id) !== idToDelete
+    );
+  
+    return {
+      error: false,
+      errorMsg: null,
+      response
+    }
+  } else {
+    return {
+      error: true,
+      errorMsg: "El producto no existe",
+      response: []
+    }
+  }
+
+  
+}

@@ -6,6 +6,7 @@ import Users from "@models/Users";
 import { ObjectId } from "mongoose";
 import { ErrorResponse } from "@interfaces/error";
 import { MESSAGES } from "./constants";
+import { HTTP_CODES } from "@constants/responseCodes";
 
 declare module "express-session" {
   interface Session {
@@ -20,7 +21,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   const userExist = await Users.findOne({ email: req.body.email });
 
   if (!!userExist) {
-    createError(next, res, MESSAGES.alreadyExist, 409);
+    createError(next, res, MESSAGES.alreadyExist, HTTP_CODES.CONFLICT.code);
   } else {
     bcrypt.hash(req.body.password, 8, (hashError, hash) => {
       if (!hashError) {
@@ -31,7 +32,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
           .then(async (response: _User) => {
             res.send({ success: true, response });
           })
-          .catch((err: Error) => createError(next, res, err.message, 400));
+          .catch((err: Error) => createError(next, res, err.message, HTTP_CODES.SERVER_ERROR.code));
       }
 
       return createError(next, res, hashError.message, 500);
@@ -45,7 +46,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   const userExist = await Users.findOne({ email });
 
   if (!userExist) {
-    return createError(next, res, MESSAGES.error, 401);
+    return createError(next, res, MESSAGES.error, HTTP_CODES.NOT_FOUND.code);
   }
 
   return bcrypt.compare(password, userExist.password, (error, response) => {
@@ -55,16 +56,16 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
       req.session._id = userExist._id;
 
       return res
-        .status(200)
+        .status(HTTP_CODES.OK.code)
         .json({ success: true, username: userExist.name, id: userExist._id });
     }
-    return createError(next, res, MESSAGES.error, 401);
+    return createError(next, res, MESSAGES.error, HTTP_CODES.SERVER_ERROR.code);
   });
 };
 
 const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
   req.session.destroy((err) => {
-    if (err) createError(next, res, "jajaj", 500);
+    if (err) createError(next, res, HTTP_CODES.SERVER_ERROR.message, HTTP_CODES.SERVER_ERROR.code);
     res.send({ success: true });
   });
 };
@@ -79,7 +80,7 @@ const editUser = (req: Request, res: Response, next: NextFunction) => {
   Users.findOneAndUpdate({ _id: req.params.id }, req.body)
     .then((response) => {
       if (!response) {
-        createError(next, res, "User not found", 404);
+        createError(next, res, "User not found", HTTP_CODES.NOT_FOUND.code);
       } else {
         res.send({ success: true, response });
       }

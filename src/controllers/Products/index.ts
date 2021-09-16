@@ -1,9 +1,10 @@
+import { HTTP_CODES } from "@constants/responseCodes";
 import createError from "@helpers/createError";
 import { ErrorResponse } from "@interfaces/error";
 import Products from "@models/Products";
 import { NextFunction, Request, Response } from "express";
 import { INITIAL_RATING } from "./constants";
-import { updateRating } from "./utils";
+import { deleteComment, updateRating } from "./utils";
 
 const getProducts = (req: Request, res: Response, next: NextFunction) => {
   Products.find({ storeId: req.session.storeId })
@@ -45,7 +46,7 @@ const editProduct = (req: Request, res: Response, next: NextFunction) => {
   Products.findOneAndUpdate({ _id: req.params.id }, req.body).then(
     (response) => {
       if (!response) {
-        createError(next, res, "Product not found", 404);
+        createError(next, res, HTTP_CODES.NOT_FOUND.message, HTTP_CODES.NOT_FOUND.code);
       } else {
         res.send({ success: true, response });
       }
@@ -57,7 +58,7 @@ const deleteProduct = (req: Request, res: Response, next: NextFunction) => {
   Products.findOneAndDelete({ _id: req.params.id })
     .then((response) => {
       if (!response) {
-        createError(next, res, "Product not found", 404);
+        createError(next, res, HTTP_CODES.NOT_FOUND.message, HTTP_CODES.NOT_FOUND.code);
       } else {
         res.send({ success: true, response });
       }
@@ -69,7 +70,7 @@ const deleteProduct = (req: Request, res: Response, next: NextFunction) => {
 
 const rateProduct = (req: Request, res: Response, next: NextFunction) => {
   if (req.body.rating > 5 || req.body.rating < 0) {
-    return createError(next, res, "The score must be from 0 to 5", 400);
+    return createError(next, res, "El puntaje debe ser entre 0 y 5", HTTP_CODES.BAD_REQUEST.code);
   }
 
   return Products.findOne({ _id: req.params.id }, "rating")
@@ -111,6 +112,46 @@ const commentOnProduct = (req: Request, res: Response, next: NextFunction) => {
   );
 };
 
+const deleteCommentOnProduct = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  return Products.findOne({ _id: req.params.id }, "comments").then(
+    (response) => {
+      if (response) {
+        let NEW_COMMENTS = deleteComment(
+          response.comments,
+          req.params.comment_id
+        );
+
+        if (NEW_COMMENTS.error) {
+          createError(next, res, NEW_COMMENTS.errorMsg || HTTP_CODES.NOT_FOUND.message, HTTP_CODES.NOT_FOUND.code);
+        } else {
+          Products.findOneAndUpdate(
+            { _id: req.params.id },
+            { comments: NEW_COMMENTS.response }
+          )
+            .then(() => {
+              res.send({
+                success: true,
+                response: "Comentario eliminado",
+              });
+            })
+            .catch((err) => createError(next, res, err.message, err.status));
+        }
+      } else {
+        createError(
+          next,
+          res,
+          "Ocurrió un error eliminando el comentario",
+          HTTP_CODES.SERVER_ERROR.code
+        );
+      }
+    }
+  );
+};
+
 export default {
   getProducts,
   getSingleProduct,
@@ -119,4 +160,5 @@ export default {
   deleteProduct,
   rateProduct,
   commentOnProduct,
+  deleteCommentOnProduct,
 };
