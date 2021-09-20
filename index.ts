@@ -21,7 +21,6 @@ console.clear();
 
 const app = express();
 const PORT = config.server.port;
-// const {BACKOFFICE, FRONTEND, TEST_ENV} = process.env;
 
 app.use(upload.any())
 app.use(cors({ credentials: true, origin: true }));
