@@ -21,10 +21,10 @@ console.clear();
 
 const app = express();
 const PORT = config.server.port;
-const {BACKOFFICE, FRONTEND, TEST_ENV} = process.env;
+// const {BACKOFFICE, FRONTEND, TEST_ENV} = process.env;
 
 app.use(upload.any())
-app.use(cors({ credentials: true, origin: [FRONTEND!, BACKOFFICE!, TEST_ENV!] }));
+app.use(cors({ credentials: true, origin: true }));
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(handleError);
