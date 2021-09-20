@@ -80,7 +80,7 @@ const editUser = (req: Request, res: Response, next: NextFunction) => {
   Users.findOneAndUpdate({ _id: req.params.id }, req.body)
     .then((response) => {
       if (!response) {
-        createError(next, res, "User not found", HTTP_CODES.NOT_FOUND.code);
+        createError(next, res, "Usuario no encontrado", HTTP_CODES.NOT_FOUND.code);
       } else {
         res.send({ success: true, response });
       }
@@ -90,7 +90,7 @@ const editUser = (req: Request, res: Response, next: NextFunction) => {
     });
 };
 
-const checkUser = (req: Request, res: Response, next: NextFunction) => {
+const checkUser = (req: Request, res: Response) => {
   res.send({ success: true, data: req.session });
 };
 
