@@ -16,7 +16,7 @@ const Products: Schema = new Schema(
       usersRating: { type: Number, required: false, default: 0 },
       total: {type: Number, required: false, default: 0}
     },
-    category: [String],
+    category: Number,
     image: [String],
     comments: [{ body: String, timestamp: Date }],
   },
