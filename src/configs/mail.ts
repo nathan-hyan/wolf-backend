@@ -1,8 +1,7 @@
 export const TRANSPORT_CONFIG = {
-  service: 'gmail',
-  host: "smtp.gmail.com",
+  service: 'outlook',
+  host: "smtp-mail.outlook.com",
   port: 587,
-  secure: false,
   tls: {
     ciphers: "SSLv3",
   },
