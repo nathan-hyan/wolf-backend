@@ -1,10 +1,5 @@
 export const TRANSPORT_CONFIG = {
-  service: 'outlook',
-  host: "smtp-mail.outlook.com",
-  port: 587,
-  tls: {
-    ciphers: "SSLv3",
-  },
+  service: 'hotmail',
   auth: {
     user: process.env.MAIL_SENDER,
     pass: process.env.MAIL_SENDER_PASSWORD,
