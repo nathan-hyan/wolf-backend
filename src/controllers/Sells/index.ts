@@ -104,8 +104,6 @@ const getSellList = async (req: Request, res: Response, next: NextFunction) => {
 
   Sells.find({})
     .then((response) => {
-      console.log(monthlyFindings)
-
       res.send({
         success: true,
         data: response,
@@ -143,7 +141,6 @@ const deleteSell = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const toggleFinished = (req: Request, res: Response, next: NextFunction) => {
-  console.log("It got in");
   Sells.findOne({ _id: req.params.id })
     .then((response) => {
       Sells.findOneAndUpdate(
