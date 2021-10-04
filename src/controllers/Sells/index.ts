@@ -7,6 +7,7 @@ import { NextFunction, Request, Response } from "express";
 import { ErrorResponse } from "@interfaces/error";
 import { sendPurchaseMail } from "@helpers/mailHandler";
 import { HTTP_CODES } from "@constants/responseCodes";
+import { buildQuery, getTotalAmount } from "./utils";
 
 interface CartProduct {
   id: string;
@@ -77,7 +78,12 @@ const createSell = async (req: Request, res: Response, next: NextFunction) => {
       })
       .catch((err) => createError(next, res, err.message, err.status));
   } else {
-    createError(next, res, "No hay stock suficiente", HTTP_CODES.BAD_REQUEST.code);
+    createError(
+      next,
+      res,
+      "No hay stock suficiente",
+      HTTP_CODES.BAD_REQUEST.code
+    );
   }
 };
 
@@ -91,10 +97,23 @@ const getSell = (req: Request, res: Response, next: NextFunction) => {
     );
 };
 
-const getSellList = (req: Request, res: Response, next: NextFunction) => {
+const getSellList = async (req: Request, res: Response, next: NextFunction) => {
+  const query = buildQuery()
+
+  const monthlyFindings = await Sells.find({...query});
+
   Sells.find({})
     .then((response) => {
-      res.send({ success: true, data: response });
+      res.send({
+        success: true,
+        data: response,
+        additionalInfo: {
+          monthPurchases: monthlyFindings.length,
+          totalPurchases: response.length,
+          monthAmount: getTotalAmount(monthlyFindings),
+          totalAmount: getTotalAmount(response),
+        },
+      });
     })
     .catch((err: ErrorResponse) =>
       createError(next, res, err.message, err.status)
@@ -122,7 +141,6 @@ const deleteSell = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const toggleFinished = (req: Request, res: Response, next: NextFunction) => {
-  console.log("It got in")
   Sells.findOne({ _id: req.params.id })
     .then((response) => {
       Sells.findOneAndUpdate(

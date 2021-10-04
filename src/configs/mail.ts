@@ -1,11 +1,5 @@
 export const TRANSPORT_CONFIG = {
-  service: 'gmail',
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  tls: {
-    ciphers: "SSLv3",
-  },
+  service: 'hotmail',
   auth: {
     user: process.env.MAIL_SENDER,
     pass: process.env.MAIL_SENDER_PASSWORD,

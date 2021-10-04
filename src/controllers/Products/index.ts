@@ -46,7 +46,12 @@ const editProduct = (req: Request, res: Response, next: NextFunction) => {
   Products.findOneAndUpdate({ _id: req.params.id }, req.body).then(
     (response) => {
       if (!response) {
-        createError(next, res, HTTP_CODES.NOT_FOUND.message, HTTP_CODES.NOT_FOUND.code);
+        createError(
+          next,
+          res,
+          HTTP_CODES.NOT_FOUND.message,
+          HTTP_CODES.NOT_FOUND.code
+        );
       } else {
         res.send({ success: true, response });
       }
@@ -58,7 +63,12 @@ const deleteProduct = (req: Request, res: Response, next: NextFunction) => {
   Products.findOneAndDelete({ _id: req.params.id })
     .then((response) => {
       if (!response) {
-        createError(next, res, HTTP_CODES.NOT_FOUND.message, HTTP_CODES.NOT_FOUND.code);
+        createError(
+          next,
+          res,
+          HTTP_CODES.NOT_FOUND.message,
+          HTTP_CODES.NOT_FOUND.code
+        );
       } else {
         res.send({ success: true, response });
       }
@@ -70,7 +80,12 @@ const deleteProduct = (req: Request, res: Response, next: NextFunction) => {
 
 const rateProduct = (req: Request, res: Response, next: NextFunction) => {
   if (req.body.rating > 5 || req.body.rating < 0) {
-    return createError(next, res, "El puntaje debe ser entre 0 y 5", HTTP_CODES.BAD_REQUEST.code);
+    return createError(
+      next,
+      res,
+      "El puntaje debe ser entre 0 y 5",
+      HTTP_CODES.BAD_REQUEST.code
+    );
   }
 
   return Products.findOne({ _id: req.params.id }, "rating")
@@ -126,7 +141,12 @@ const deleteCommentOnProduct = (
         );
 
         if (NEW_COMMENTS.error) {
-          createError(next, res, NEW_COMMENTS.errorMsg || HTTP_CODES.NOT_FOUND.message, HTTP_CODES.NOT_FOUND.code);
+          createError(
+            next,
+            res,
+            NEW_COMMENTS.errorMsg || HTTP_CODES.NOT_FOUND.message,
+            HTTP_CODES.NOT_FOUND.code
+          );
         } else {
           Products.findOneAndUpdate(
             { _id: req.params.id },
