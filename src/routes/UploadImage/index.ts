@@ -15,6 +15,7 @@ router.post("/", async (req: Request, res: Response) => {
       res.send({success: true, links});
       files.map(file => fs.unlinkSync(file))
   } catch (err) {
+      console.log(err)
       res.send({success: false, message: 'Ocurrió un error subiendo la imágen'})
       files.map(file => fs.unlinkSync(file))
   }
